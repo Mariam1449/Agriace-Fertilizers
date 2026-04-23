@@ -1,8 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FertilizerPro Website
+
+A modern, responsive website for FertilizerPro - Premium Fertilizers for Sustainable Agriculture. Built with Next.js 16, TypeScript, and Tailwind CSS.
+
+## Features
+
+- **Modern Stack**: Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS 4
+- **Responsive Design**: Fully responsive layout that works on all devices
+- **Dark Mode Support**: Automatic dark mode based on system preferences
+- **SEO Optimized**: Meta tags and semantic HTML for better search engine visibility
+- **Fast Performance**: Optimized build with Next.js for lightning-fast page loads
+- **Type Safe**: Full TypeScript support for better code quality
+
+## Pages
+
+- **Home**: Landing page with hero section, features, and product preview
+- **Products**: Comprehensive product catalog with pricing
+- **About**: Company information, mission, and values
+- **Contact**: Contact form and business information
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm, yarn, or pnpm
+
+### Installation
+
+1. Clone the repository or navigate to the project directory:
+
+```bash
+cd Fertilizers
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
@@ -10,27 +51,113 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the website.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+Fertilizers/
+├── src/
+│   ├── app/                # App router pages
+│   │   ├── about/         # About page
+│   │   ├── contact/       # Contact page
+│   │   ├── products/      # Products page
+│   │   ├── layout.tsx     # Root layout with Header/Footer
+│   │   ├── page.tsx       # Home page
+│   │   └── globals.css    # Global styles
+│   └── components/        # React components
+│       ├── layout/        # Layout components
+│       │   ├── Header.tsx
+│       │   └── Footer.tsx
+│       └── ui/            # UI components
+├── public/                # Static files
+├── .prettierrc           # Prettier configuration
+├── eslint.config.mjs     # ESLint configuration
+├── next.config.ts        # Next.js configuration
+├── tailwind.config.ts    # Tailwind CSS configuration
+└── tsconfig.json         # TypeScript configuration
+```
 
-## Learn More
+## Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start development server on http://localhost:3000
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint to check code quality
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting without making changes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Customization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Colors
 
-## Deploy on Vercel
+The website uses a green/agriculture theme. You can customize colors in `src/app/globals.css`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```css
+:root {
+  --primary: #22c55e;      /* Green */
+  --primary-dark: #16a34a; /* Dark Green */
+  --secondary: #84cc16;    /* Lime */
+  --accent: #eab308;       /* Yellow */
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Content
+
+- Update the company name and branding in `src/components/layout/Header.tsx`
+- Modify product information in `src/app/products/page.tsx`
+- Change contact details in `src/components/layout/Footer.tsx` and `src/app/contact/page.tsx`
+
+## Technologies Used
+
+- **Framework**: Next.js 16.2.4
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **Font**: Geist Sans & Geist Mono
+- **Code Quality**: ESLint 9, Prettier 3.8
+- **Icons**: SVG icons (inline)
+
+## Building for Production
+
+```bash
+npm run build
+npm run start
+```
+
+This will create an optimized production build and start the server on port 3000.
+
+## Deployment
+
+The easiest way to deploy is using [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import the repository in Vercel
+3. Vercel will automatically detect Next.js and configure the build
+4. Your site will be live in minutes!
+
+Alternatively, you can deploy to:
+- Netlify
+- AWS Amplify
+- Digital Ocean
+- Any platform that supports Node.js
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+This project is private and proprietary.
+
+## Support
+
+For support, email info@fertilizerpro.com or visit the Contact page.
+
+---
+
+Built with Next.js by FertilizerPro Team
