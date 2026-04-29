@@ -7,11 +7,41 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Thank you for your message! We'll get back to you soon.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { message?: string; error?: string }
+        | null;
+
+      if (!response.ok) {
+        setErrorMessage(payload?.error ?? "Unable to send your message right now.");
+        return;
+      }
+
+      setSuccessMessage(payload?.message ?? "Thank you for your message.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setErrorMessage("Unable to send your message right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -70,6 +100,7 @@ export default function Contact() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   required
                   className="w-full rounded-xl border border-[#ddd4bf] bg-white/84 px-4 py-3 text-[#22351d] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] outline-none transition-all duration-200 placeholder:text-[#8a8375] focus:border-[#7e8d2f] focus:ring-2 focus:ring-[#7e8d2f]/20"
                   placeholder="Your name"
@@ -89,6 +120,7 @@ export default function Contact() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   required
                   className="w-full rounded-xl border border-[#ddd4bf] bg-white/84 px-4 py-3 text-[#22351d] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] outline-none transition-all duration-200 placeholder:text-[#8a8375] focus:border-[#7e8d2f] focus:ring-2 focus:ring-[#7e8d2f]/20"
                   placeholder="your.email@example.com"
@@ -108,6 +140,7 @@ export default function Contact() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   required
                   className="w-full rounded-xl border border-[#ddd4bf] bg-white/84 px-4 py-3 text-[#22351d] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] outline-none transition-all duration-200 placeholder:text-[#8a8375] focus:border-[#7e8d2f] focus:ring-2 focus:ring-[#7e8d2f]/20"
                   placeholder="How can we help?"
@@ -126,6 +159,7 @@ export default function Contact() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   required
                   rows={5}
                   className="w-full rounded-xl border border-[#ddd4bf] bg-white/84 px-4 py-3 text-[#22351d] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] outline-none transition-all duration-200 placeholder:text-[#8a8375] focus:border-[#7e8d2f] focus:ring-2 focus:ring-[#7e8d2f]/20"
@@ -133,8 +167,19 @@ export default function Contact() {
                 ></textarea>
               </div>
 
-              <button type="submit" className="w-full btn-primary">
-                Send Message
+              {successMessage ? (
+                <p className="mb-4 text-sm text-[#2f5d31]">{successMessage}</p>
+              ) : null}
+              {errorMessage ? (
+                <p className="mb-4 text-sm text-red-700">{errorMessage}</p>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`w-full btn-primary ${isSubmitting ? "cursor-not-allowed opacity-70" : ""}`}
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
@@ -167,7 +212,7 @@ export default function Contact() {
                       Email
                     </h3>
                     <p className="text-[#59574c]">
-                      info@agriace.com
+                      info@agriaces.com
                     </p>
                     <p className="text-[#59574c]">
                       support@agriace.com
