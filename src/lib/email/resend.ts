@@ -28,6 +28,7 @@ const DEFAULT_FROM_EMAIL = "AgriAce Fertilizers <noreply@agriaces.com>";
 const DEFAULT_TIMEOUT_MS = 8_000;
 const DEFAULT_MAX_RETRIES = 2;
 const DEFAULT_DNS_RESULT_ORDER = "verbatim";
+const RESEND_TAG_TOKEN_PATTERN = /[^A-Za-z0-9_-]/g;
 let hasConfiguredDnsResultOrder = false;
 
 function parseNumberEnv(
@@ -96,6 +97,22 @@ function sanitizeEmail(email: string): string {
   return `${local.slice(0, 2)}***@${domain}`;
 }
 
+function sanitizeResendTagToken(value: string): string {
+  const sanitized = value.trim().replace(RESEND_TAG_TOKEN_PATTERN, "_");
+  return sanitized.length > 0 ? sanitized : "unknown";
+}
+
+function normalizeResendTags(
+  tags: SendEmailInput["tags"]
+): SendEmailInput["tags"] {
+  if (!tags?.length) return undefined;
+
+  return tags.map((tag) => ({
+    name: sanitizeResendTagToken(tag.name),
+    value: sanitizeResendTagToken(tag.value),
+  }));
+}
+
 function isErrorPayload(payload: ResendSendResponse | null): boolean {
   if (!payload) return false;
   // Resend error responses include a `message` and `name`, never an `id`.
@@ -128,6 +145,7 @@ export async function sendEmailWithResend(
     min: 0,
     max: 5,
   });
+  const tags = normalizeResendTags(input.tags);
   const requestId = randomUUID();
   const totalAttempts = maxRetries + 1;
 
@@ -145,7 +163,7 @@ export async function sendEmailWithResend(
           subject: input.subject,
           text: input.text,
           html: input.html,
-          tags: input.tags,
+          tags,
         }),
         signal: AbortSignal.timeout(timeoutMs),
       });
